@@ -20,7 +20,7 @@ let is_player_a_turn = true;
 let score_player_a = 0;
 let score_player_b = 0;
 
-let timmer = 300;
+let timmer = 60;
 
 let hint_value = 0
 
@@ -146,7 +146,7 @@ function draw() {
 
 
   if (timmer <= 0) {
-    timmer = 300;
+    timmer = 60;
     is_player_a_turn = !is_player_a_turn;
   }
 
@@ -166,12 +166,17 @@ function mousePressed() {
   if (_numbers[current_index] == old_click_number) {
     visibility[old_index] = true;
     visibility[current_index] = true;
+    is_player_a_turn ? score_player_a++ : score_player_b++;
+    current_index = -1;
 
-  } else {
+  } 
+  else{
     visibility[old_index] = false;
   }
 
-  is_player_a_turn ? score_player_a++ : score_player_b++;
+
+
+
   old_index = current_index;
   old_click_number = _numbers[current_index];
 
