@@ -3,7 +3,6 @@
 // hint
 // timmer
 
-
 let i = 0;
 
 let rows = 4;
@@ -13,20 +12,20 @@ const gridSize = 80;
 let _numbers = [];
 let offset_y = 0;
 
-
-
 let visibility = [];
 let old_click_number = -1;
 let old_index = -1;
 
+let current_turn = true;
+let score_player_a = 0;
+let score_player_b = 0;
 
-
+let timmer = 60;
 
 function setup() {
   createCanvas(600, 800);
   generateNumbers(rows * column);
   frameRate(12);
-
 }
 
 // Shuffle function using Fisher-Yates algorithm
@@ -49,41 +48,50 @@ function generateNumbers(number_size) {
 
   _numbers = shuffle(numbers);
 
-
-  for(i=0;i<number_size;i++)
-  {
+  for (i = 0; i < number_size; i++) {
     visibility.push(false);
   }
-
-
-
 }
 
-
-function drawDot(number,x,y)
-{
-
+function drawDot(number, x, y) {
   let row = 0;
-  for(let o=0;o<number;o++)
-    {
-      row = Math.floor(o/3);
-      offset_y = Math.floor(Math.random() * 3);
-     circle( 10 + gridSize / 4 + (gridSize * x) + (o%3)*8, 
-     10 + gridSize / 2 + (gridSize * y) + Math.floor(o/3)*8 + offset_y, 
-     
-     
-     5);
+  for (let o = 0; o < number; o++) {
+    row = Math.floor(o / 3);
+    offset_y = Math.floor(Math.random() * 3);
+    circle(
+      10 + gridSize / 4 + gridSize * x + (o % 3) * 8,
+      10 + gridSize / 2 + gridSize * y + Math.floor(o / 3) * 8 + offset_y,
 
+      5
+    );
+  }
+}
 
+function drawPlayer() {
+  textSize(18);
 
-    }
+  textAlign(LEFT);
+  
+  if (current_turn == true) {
 
 
     
+    text("Count Down (A):"+Math.round(timmer/5),420,20);
+    fill(0,0,255);
+    
+    text("PLAYER_A: " + score_player_a, 420, 40);
+    fill(120);
+    text("PLAYER_B: " + score_player_a, 420,60);
+  } else {
+    text("Count Down (B):"+Math.round(timmer/5),420,20);
+    fill(120);
+    text("PLAYER_A : " + score_player_a, 420, 40);
+    fill(0,0,255);
+    text("PLAYER_B: " + score_player_a, 420, 60);
+  }
 }
 
 function drawGrids() {
-
   let id = 1;
   for (let y = 0; y < column; y++) {
     for (let x = 0; x < rows; x++) {
@@ -96,9 +104,9 @@ function drawGrids() {
       textAlign(CENTER, CENTER); // Center the text
       textSize(34);
 
-      if(visibility[id - 1]) // show dot or not
-      {
-        drawDot(_numbers[id - 1],x,y);
+      if (visibility[id - 1]) {
+        // show dot or not
+        drawDot(_numbers[id - 1], x, y);
       }
 
       //text(_numbers[id - 1], 10 + gridSize / 2 + (gridSize * x), 10 + gridSize / 2 + (gridSize * y));
@@ -108,36 +116,34 @@ function drawGrids() {
 }
 
 function draw() {
-  background(255); 
+  background(255);
   drawGrids();
+  drawPlayer();
 
+
+  if (timmer <= 0) {
+    timmer = 60;
+    current_turn = !current_turn;
+  }
+
+  timmer--;
 }
 
 function mousePressed() {
-
-  let current_index = Math.floor((mouseX - 10) / gridSize) + 4 * Math.floor((mouseY - 10) / gridSize);
+  let current_index =
+    Math.floor((mouseX - 10) / gridSize) +
+    4 * Math.floor((mouseY - 10) / gridSize);
 
   visibility[current_index] = true;
 
-  if(_numbers[current_index] == old_click_number)
-  {
-
+  if (_numbers[current_index] == old_click_number) {
     visibility[old_index] = true;
     visibility[current_index] = true;
-
-  }
-  else
-  {
+  } else {
     // visibility[old_index] = false;
   }
 
   old_index = current_index;
   old_click_number = _numbers[current_index];
 
-
-    
-
-
-
-  
 }
