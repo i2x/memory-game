@@ -16,11 +16,11 @@ let visibility = [];
 let old_click_number = -1;
 let old_index = -1;
 
-let current_turn = true;
+let is_player_a_turn = true;
 let score_player_a = 0;
 let score_player_b = 0;
 
-let timmer = 60;
+let timmer = 300;
 
 function setup() {
   createCanvas(600, 800);
@@ -72,7 +72,7 @@ function drawPlayer() {
 
   textAlign(LEFT);
   
-  if (current_turn == true) {
+  if (is_player_a_turn == true) {
 
 
     
@@ -81,13 +81,13 @@ function drawPlayer() {
     
     text("PLAYER_A: " + score_player_a, 420, 40);
     fill(120);
-    text("PLAYER_B: " + score_player_a, 420,60);
+    text("PLAYER_B: " + score_player_b, 420,60);
   } else {
     text("Count Down (B):"+Math.round(timmer/5),420,20);
     fill(120);
     text("PLAYER_A : " + score_player_a, 420, 40);
     fill(0,0,255);
-    text("PLAYER_B: " + score_player_a, 420, 60);
+    text("PLAYER_B: " + score_player_b, 420, 60);
   }
 }
 
@@ -122,8 +122,8 @@ function draw() {
 
 
   if (timmer <= 0) {
-    timmer = 60;
-    current_turn = !current_turn;
+    timmer = 300;
+    is_player_a_turn = !is_player_a_turn;
   }
 
   timmer--;
@@ -139,11 +139,15 @@ function mousePressed() {
   if (_numbers[current_index] == old_click_number) {
     visibility[old_index] = true;
     visibility[current_index] = true;
+
   } else {
-    // visibility[old_index] = false;
+    visibility[old_index] = false;
   }
 
+  is_player_a_turn ? score_player_a++ : score_player_b++;
   old_index = current_index;
   old_click_number = _numbers[current_index];
+
+  console.log(visibility);
 
 }
