@@ -22,6 +22,8 @@ let score_player_b = 0;
 
 let timmer = 300;
 
+let hint_value = 0
+
 function setup() {
   createCanvas(600, 800);
   generateNumbers(rows * column);
@@ -51,6 +53,25 @@ function generateNumbers(number_size) {
   for (i = 0; i < number_size; i++) {
     visibility.push(false);
   }
+}
+
+function hint(number)
+{
+
+  let match_list = [];
+
+  for(let i =0;i<_numbers.length;i++)
+  {
+    if(number == _numbers[i])
+      match_list.push(i);
+  }
+
+  hint_value = match_list[1] - match_list[0];
+
+  console.log(match_list);
+
+
+
 }
 
 function drawDot(number, x, y) {
@@ -119,6 +140,9 @@ function draw() {
   background(255);
   drawGrids();
   drawPlayer();
+  fill(100);
+  text("Hint: " + hint_value, 420, 80);
+
 
 
   if (timmer <= 0) {
@@ -136,6 +160,9 @@ function mousePressed() {
 
   visibility[current_index] = true;
 
+  hint(_numbers[current_index])
+
+
   if (_numbers[current_index] == old_click_number) {
     visibility[old_index] = true;
     visibility[current_index] = true;
@@ -149,5 +176,9 @@ function mousePressed() {
   old_click_number = _numbers[current_index];
 
   console.log(visibility);
+
+
+
+
 
 }
