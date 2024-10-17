@@ -25,6 +25,13 @@ let score_player_b = 0;
 let timmer = 60;
 let hint_value = 0
 
+let devMode = false;
+
+let buttonSize = {
+  x : 160,
+  y :40
+}
+
 
 function init()
 {
@@ -110,8 +117,11 @@ function drawPlayer() {
   textSize(18);
 
   textAlign(LEFT);
-  
+  stroke(0);
+  fill(80);
+
   if (is_player_a_turn == true) {
+
 
 
     
@@ -143,24 +153,31 @@ function drawGrids() {
       textAlign(CENTER, CENTER); // Center the text
       textSize(34);
 
+      
+      
       if (visibility[id - 1]) {
         // show dot or not
         drawDot(_numbers[id - 1], x, y);
       }
-
-      //text(_numbers[id - 1], 10 + gridSize / 2 + (gridSize * x), 10 + gridSize / 2 + (gridSize * y));
+      if(devMode == true){
+          textSize(14);
+          fill(255,0,0)
+          text(_numbers[id - 1],  gridSize  + (gridSize * x),  gridSize + (gridSize * y));
+      }
       id++;
     }
   }
 }
 
-function restart()
-{
 
-}
-
-function restartButton()
+function drawDevMode()
 {
+  stroke(0);
+  devMode == true ? fill(0,0,0) : fill(200);
+  rect(420,100,buttonSize.x,buttonSize.y);
+  fill(255);
+
+  devMode == true ?  text("✅  DEV MODE",430,120) :  text("⛔ DEV MODE",430,120);
 
 
 }
@@ -210,6 +227,7 @@ function draw() {
 
     drawGrids();
     drawPlayer();
+    drawDevMode();
     fill(100);
     text("Hint: " + hint_value, 420, 80);
   
@@ -221,12 +239,6 @@ function draw() {
 
 
   }
-
-
-
-  
-
-
 
 
 }
@@ -281,6 +293,14 @@ function mousePressed() {
   old_click_number = _numbers[current_index];
 
   }
+
+
+
+ if(mouseX >= 420 &&  mouseX <= 420+buttonSize.x && mouseY >= 100 && mouseY <= 100+buttonSize.y){
+    devMode = !devMode;
+ }
+
+
 
 
 
