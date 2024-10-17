@@ -308,36 +308,46 @@ function mousePressed() {
   else
   {
 
-    let current_index =
-    Math.floor((mouseX - 10) / gridSize) +
-    4 * Math.floor((mouseY - 10) / gridSize);
-
-  visibility[current_index] = true;
-
-  hint(_numbers[current_index])
+    let current_index = Math.floor((mouseX - 10) / gridSize) + 4 * Math.floor((mouseY - 10) / gridSize);
 
 
-  if (_numbers[current_index] == old_click_number && current_index != old_index & Number.isInteger(_numbers[current_index])) {
-    visibility[old_index] = true;
-    visibility[current_index] = true;
-    is_player_a_turn ? score_player_a++ : score_player_b++;
 
-    if(_numbers.length <= 2*(score_player_a+score_player_b))  
-      isGameOver = true;
+    if(mouseX-10 <= rows*gridSize && mouseY-10 <= column*gridSize)
+    {
+
+      console.log("in");
+      visibility[current_index] = true;
+
+      hint(_numbers[current_index])
+    
+    
+      if (_numbers[current_index] == old_click_number && current_index != old_index & Number.isInteger(_numbers[current_index])) {
+        visibility[old_index] = true;
+        visibility[current_index] = true;
+        is_player_a_turn ? score_player_a++ : score_player_b++;
+    
+        if(_numbers.length <= 2*(score_player_a+score_player_b))  
+          isGameOver = true;
+    
+    
+        current_index = -1;
+    
+      } 
+      else{
+        visibility[old_index] = false;
+      }
+    
+    
+      old_index = current_index;
+      old_click_number = _numbers[current_index];
+    
+      }
+    }
+
+  
 
 
-    current_index = -1;
 
-  } 
-  else{
-    visibility[old_index] = false;
-  }
-
-
-  old_index = current_index;
-  old_click_number = _numbers[current_index];
-
-  }
 
 
 
