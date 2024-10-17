@@ -28,13 +28,33 @@ let hint_value = 0
 let devMode = false;
 
 let buttonSize = {
-  x : 160,
+  x : 168,
   y :40
 }
 
 
+let gameLevel = 0;
+
 function init()
 {
+
+
+    switch(gameLevel) {
+      case 0:
+          rows = 4;
+          column = 2;
+          break;
+      case 1:
+          rows = 4;
+          column = 4;
+          break;
+      default:
+          rows = 4;
+          column = 8;
+          break;
+  }
+
+
   _numbers = [];
   is_player_a_turn = true;
   isGameOver = false;
@@ -106,7 +126,7 @@ function drawDot(number, x, y) {
     offset_y = Math.floor(Math.random() * 3);
     circle(
       10 + gridSize / 4 + gridSize * x + (o % 3) * 8,
-      10 + gridSize / 2 + gridSize * y + Math.floor(o / 3) * 8 + offset_y,
+       gridSize / 2 + gridSize * y + Math.floor(o / 3) * 8 + offset_y,
 
       5
     );
@@ -173,7 +193,7 @@ function drawGrids() {
 function drawDevMode()
 {
   stroke(0);
-  devMode == true ? fill(0,0,0) : fill(200);
+  devMode == true ? fill(0) : fill(200);
   rect(420,100,buttonSize.x,buttonSize.y);
   fill(255);
 
@@ -181,6 +201,30 @@ function drawDevMode()
 
 
 }
+
+function drawGameLevel()
+{
+  stroke(0);
+  fill(0);
+  rect(420,150,buttonSize.x,buttonSize.y);
+  fill(255); 
+
+  switch(gameLevel) {
+    case 0:
+      text("👶 LEVEL:EASY",430,170)
+        break;
+    case 1:
+
+    text("😎 LEVEL:NOMAL",430,170)
+        break;
+    default:
+      text("☠️ LEVEL:HARD",430,170)
+      break;
+  }
+
+
+}
+
 
 function draw() {
   background(255);
@@ -228,6 +272,7 @@ function draw() {
     drawGrids();
     drawPlayer();
     drawDevMode();
+    drawGameLevel();
     fill(100);
     text("Hint: " + hint_value, 420, 80);
   
@@ -299,6 +344,12 @@ function mousePressed() {
  if(mouseX >= 420 &&  mouseX <= 420+buttonSize.x && mouseY >= 100 && mouseY <= 100+buttonSize.y){
     devMode = !devMode;
  }
+
+ if(mouseX >= 420 &&  mouseX <= 420+buttonSize.x && mouseY >= 150 && mouseY <= 150+buttonSize.y){
+  gameLevel++;
+  if(gameLevel > 2) gameLevel = 0;
+  init();
+}
 
 
 
