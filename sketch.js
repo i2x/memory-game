@@ -17,16 +17,33 @@ let old_click_number = -1;
 let old_index = -1;
 
 let is_player_a_turn = true;
+let isGameOver = false;
 let score_player_a = 0;
 let score_player_b = 0;
 
-let timmer = 60;
 
+let timmer = 60;
 let hint_value = 0
+
+
+function init()
+{
+  _numbers = [];
+  is_player_a_turn = true;
+  isGameOver = false;
+  score_player_a = 0;
+  score_player_b = 0;
+  visibility = [];
+  old_click_number = -1;
+  old_index = -1;
+  timmer = 61;
+  generateNumbers(rows * column);
+
+}
 
 function setup() {
   createCanvas(600, 800);
-  generateNumbers(rows * column);
+  init();
   frameRate(12);
 }
 
@@ -38,6 +55,7 @@ function shuffle(array) {
   }
   return array;
 }
+
 
 function generateNumbers(number_size) {
   let numbers = [];
@@ -136,25 +154,104 @@ function drawGrids() {
   }
 }
 
-function draw() {
-  background(255);
-  drawGrids();
-  drawPlayer();
-  fill(100);
-  text("Hint: " + hint_value, 420, 80);
+function restart()
+{
 
-
-
-  if (timmer <= 0) {
-    timmer = 60;
-    is_player_a_turn = !is_player_a_turn;
-  }
-
-  timmer--;
 }
 
+function restartButton()
+{
+
+
+}
+
+function draw() {
+  background(255);
+
+  
+
+
+  if(isGameOver)
+  {
+
+    
+
+    _numbers = [];
+    fill(100);
+    textAlign(LEFT);
+    text("GAME OVER", 100, 60);
+
+    if (score_player_a == score_player_b) {
+      text("Draw", 100, 80);
+      text("SCORE A:"+score_player_a, 100);
+      text("SCORE B:"+ score_player_b, 120);
+
+  } else if (score_player_a > score_player_b) {
+      text("WINNER IS A",100,80)
+      text("🏆 SCORE A:"+score_player_a, 100,100);
+      text("   SCORE B:"+score_player_b, 100,120);
+  } else {
+      text("WINNER IS B",100,80);
+      text("   SCORE A:"+score_player_a, 100,100);
+      text("🏆 SCORE B:"+score_player_b, 100,120);
+  }
+
+  text("🔁 Click here to restart", 100, 140);
+
+
+
+
+
+
+
+  }
+  else
+  {
+
+    drawGrids();
+    drawPlayer();
+    fill(100);
+    text("Hint: " + hint_value, 420, 80);
+  
+    if (timmer <= 0) {
+      timmer = 60;
+      is_player_a_turn = !is_player_a_turn;
+    }
+    timmer--;
+
+
+  }
+
+
+
+  
+
+
+
+
+}
+
+
+
+
 function mousePressed() {
-  let current_index =
+
+
+
+  if(isGameOver)
+  {
+
+    if(mouseY >= 80 && mouseY >= 120 )
+    {
+      init();
+    }
+
+  }
+
+  else
+  {
+
+    let current_index =
     Math.floor((mouseX - 10) / gridSize) +
     4 * Math.floor((mouseY - 10) / gridSize);
 
@@ -163,10 +260,15 @@ function mousePressed() {
   hint(_numbers[current_index])
 
 
-  if (_numbers[current_index] == old_click_number) {
+  if (_numbers[current_index] == old_click_number  ) {
     visibility[old_index] = true;
     visibility[current_index] = true;
     is_player_a_turn ? score_player_a++ : score_player_b++;
+
+    if(_numbers.length <= 2*(score_player_a+score_player_b))  
+      isGameOver = true;
+
+
     current_index = -1;
 
   } 
@@ -175,12 +277,10 @@ function mousePressed() {
   }
 
 
-
-
   old_index = current_index;
   old_click_number = _numbers[current_index];
 
-  console.log(visibility);
+  }
 
 
 
