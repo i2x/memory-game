@@ -317,7 +317,7 @@ function mousePressed() {
   hint(_numbers[current_index])
 
 
-  if (_numbers[current_index] == old_click_number && current_index != old_index ) {
+  if (_numbers[current_index] == old_click_number && current_index != old_index & Number.isInteger(_numbers[current_index])) {
     visibility[old_index] = true;
     visibility[current_index] = true;
     is_player_a_turn ? score_player_a++ : score_player_b++;
